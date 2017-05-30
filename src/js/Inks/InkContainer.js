@@ -31,6 +31,7 @@ export default class InkContainer extends PureComponent {
     transitionOverlap: PropTypes.number.isRequired,
     transitionEnterTimeout: PropTypes.number.isRequired,
     transitionLeaveTimeout: PropTypes.number.isRequired,
+    parentRef: PropTypes.object,
   };
 
   static defaultProps = {
@@ -71,15 +72,15 @@ export default class InkContainer extends PureComponent {
     if (di === ndi) {
       if (!this.props.parentRef) {
         return;
-      } else {
-        return this._initOrRemoveEvents(this.props);
       }
-    }
 
-    const mouseDisabledDiff = this._isListenerDisabledDiff('mouse', di, ndi);
-    const touchDisabledDiff = this._isListenerDisabledDiff('touch', di, ndi);
-    const keyboardDisabledDiff = this._isListenerDisabledDiff('keyboard', di, ndi);
-    this._initOrRemoveEvents(nextProps, keyboardDisabledDiff, mouseDisabledDiff, touchDisabledDiff);
+      this._initOrRemoveEvents(this.props);
+    } else {
+      const mouseDisabledDiff = this._isListenerDisabledDiff('mouse', di, ndi);
+      const touchDisabledDiff = this._isListenerDisabledDiff('touch', di, ndi);
+      const keyboardDisabledDiff = this._isListenerDisabledDiff('keyboard', di, ndi);
+      this._initOrRemoveEvents(nextProps, keyboardDisabledDiff, mouseDisabledDiff, touchDisabledDiff);
+    }
   }
 
   componentWillUnmount() {
