@@ -11,6 +11,7 @@ import handleKeyboardAccessibility from '../utils/EventUtils/handleKeyboardAcces
 import controlled from '../utils/PropTypes/controlled';
 import isBetween from '../utils/NumberUtils/isBetween';
 import addSuffix from '../utils/StringUtils/addSuffix';
+import getHostDOMNode from '../utils/getHostDOMNode';
 import List from '../Lists/List';
 import ListItem from '../Lists/ListItem';
 import Menu from '../Menus/Menu';
@@ -460,11 +461,16 @@ export default class SelectField extends PureComponent {
   }
 
   _setMenu(menu) {
-    this._menu = findDOMNode(menu);
+    if (menu) {
+      this._menu = menu._container;
+    }
   }
 
   _setField(field) {
-    this._field = findDOMNode(field);
+    this._field = {
+      ...field,
+      focus: field.props.onFocus,
+    };
   }
 
   _positionList(listRef) {
@@ -473,8 +479,7 @@ export default class SelectField extends PureComponent {
     } else if (!this._activeItem) {
       return;
     }
-
-    const list = findDOMNode(listRef);
+    const list = getHostDOMNode(listRef);
     const { position, menuItems, toolbar } = this.props;
     if (position === SelectField.Positions.BELOW || toolbar) { // only modify scroll distance when below
       const activeIndex = Math.min(this._activeItem, menuItems.length - 2);
@@ -699,7 +704,7 @@ export default class SelectField extends PureComponent {
     }
 
     if (item.props.active) {
-      this._activeItem = findDOMNode(item);
+      this._activeItem = item._container;
       item.focus();
     }
 
