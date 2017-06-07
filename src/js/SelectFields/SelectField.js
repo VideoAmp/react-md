@@ -467,10 +467,7 @@ export default class SelectField extends PureComponent {
   }
 
   _setField(field) {
-    this._field = {
-      ...field,
-      focus: field.props.onFocus,
-    };
+    this._field = field;
   }
 
   _positionList(listRef) {
